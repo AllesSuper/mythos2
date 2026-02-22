@@ -2,16 +2,15 @@ from __future__ import annotations
 
 import sys
 
+import mythos.commands  # noqa: F401  (import triggert auto-discovery)
+
 from mythos.registry import all_commands, get
 
 
 def main(argv: list[str]) -> int:
     if len(argv) < 2:
         cmd = get("help")
-        if cmd:
-            return cmd.handler([])
-        print("MYTHOS: Nutze 'python mythos_cli.py help'")
-        return 2
+        return cmd.handler([]) if cmd else 2
 
     cmd_name = argv[1].strip().lower()
     cmd = get(cmd_name)
