@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import sys
 
-import mythos.commands  # noqa: F401  (import triggert auto-discovery)
+import mythos.commands  # noqa: F401
 
+from mythos.errors import MythosError
 from mythos.registry import all_commands, get
 
 
@@ -21,7 +22,11 @@ def main(argv: list[str]) -> int:
             print(f"  {c.name:10} {c.help}")
         return 2
 
-    return cmd.handler(argv[2:])
+    try:
+        return cmd.handler(argv[2:])
+    except MythosError as e:
+        print(f"❌ Fehler: {e}")
+        return 2
 
 
 if __name__ == "__main__":
