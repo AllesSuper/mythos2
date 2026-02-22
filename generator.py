@@ -19,7 +19,6 @@ def _pool(theme: str) -> dict[str, list[str]]:
             "obstacles": ["Firewall-Wächter", "Zeitparadoxon", "Spiegel-Simulation", "Schuldvertrag", "vergessener Codec"],
             "rewards": ["Admin-Rechte", "ein neues Muster", "einen Mut-Boost", "eine geheime Route", "einen Verbündeten-Drone"],
         }
-    # default: myth
     return {
         "patrons": ["Athene", "Hermes", "Hekate", "Odin", "Freya", "Anansi", "Ra", "Morrígan"],
         "places": ["Nebelwald", "versunkene Bibliothek", "Basaltklippen", "Mondtempel", "Salzsteppe", "Glaswüste"],
@@ -34,11 +33,14 @@ def generate() -> dict:
     theme = str(cfg.get("theme", "myth")).strip().lower()
     p = _pool(theme)
 
-    patron = random.choice(p["patrons"])
-    place = random.choice(p["places"])
-    artifact = random.choice(p["artifacts"])
-    obstacle = random.choice(p["obstacles"])
-    reward = random.choice(p["rewards"])
+    seed_raw = str(cfg.get("seed", "")).strip()
+    rng = random.Random(seed_raw) if seed_raw else random
+
+    patron = rng.choice(p["patrons"])
+    place = rng.choice(p["places"])
+    artifact = rng.choice(p["artifacts"])
+    obstacle = rng.choice(p["obstacles"])
+    reward = rng.choice(p["rewards"])
 
     title = f"Die Prüfung von {patron}"
     hook = f"{patron} flüstert: In der {place} liegt der {artifact}. Doch ein {obstacle} steht im Weg."
